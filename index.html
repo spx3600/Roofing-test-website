@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -197,6 +197,30 @@
       margin-bottom: 16px;
       transition: background 0.2s ease;
     }
+
+    /* Language toggle */
+    .lang-btn {
+      padding: 2px 8px;
+      font-size: 11px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      border: none;
+    }
+    .lang-btn.active {
+      background: #F57A00;
+      color: #fff;
+    }
+    .lang-btn:not(.active) {
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+    }
+    .lang-btn:not(.active):hover {
+      color: #fff;
+    }
   </style>
 </head>
 <body class="bg-white text-brand-charcoal">
@@ -215,7 +239,7 @@
         </span>
       </div>
       <div class="flex items-center gap-4 text-xs">
-        <span class="hidden md:block">Licensed &amp; Insured</span>
+        <span class="hidden md:block" data-i18n="licensed-insured">Licensed &amp; Insured</span>
         <span class="hidden md:block text-brand-orange font-semibold">RBQ #0000-0000-00</span>
         <div class="flex items-center gap-2">
           <a href="#" class="hover:text-brand-orange transition-colors duration-200" aria-label="Facebook">
@@ -224,6 +248,12 @@
           <a href="#" class="hover:text-brand-orange transition-colors duration-200" aria-label="Instagram">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
+          <!-- Language Toggle -->
+          <div class="flex items-center rounded overflow-hidden border border-white/25 ml-1">
+            <button id="lang-en-btn" class="lang-btn active" onclick="applyLang('en')" aria-label="Switch to English">EN</button>
+            <div class="w-px h-4 bg-white/25"></div>
+            <button id="lang-fr-btn" class="lang-btn" onclick="applyLang('fr')" aria-label="Passer en français">FR</button>
+          </div>
         </div>
       </div>
     </div>
@@ -237,19 +267,19 @@
           <img src="brand_assets/Logo.png" alt="Structura Roofing" class="h-16 w-auto" />
         </a>
         <div class="hidden lg:flex items-center gap-8">
-          <a href="#" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">Home</a>
-          <a href="#services" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">Services</a>
-          <a href="#about" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">About</a>
-          <a href="#testimonials" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">Reviews</a>
-          <a href="#gallery" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">Gallery</a>
-          <a href="#contact" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide">Contact</a>
+          <a href="#" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-home">Home</a>
+          <a href="#services" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-services">Services</a>
+          <a href="#about" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-about">About</a>
+          <a href="#testimonials" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-reviews">Reviews</a>
+          <a href="#gallery" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-gallery">Gallery</a>
+          <a href="#contact" class="nav-link text-sm font-semibold text-brand-charcoal uppercase tracking-wide" data-i18n="nav-contact">Contact</a>
         </div>
         <div class="hidden lg:flex items-center gap-4">
           <div class="text-right">
-            <div class="text-xs text-brand-gray uppercase tracking-wider">Call us now</div>
+            <div class="text-xs text-brand-gray uppercase tracking-wider" data-i18n="call-us-now">Call us now</div>
             <a href="tel:+15141234567" class="text-brand-blue font-heading font-bold text-lg leading-tight hover:text-brand-orange transition-colors duration-200">(514) 123-4567</a>
           </div>
-          <a href="#quote" class="btn-orange px-5 py-3 rounded text-sm">Free Quote</a>
+          <a href="#quote" class="btn-orange px-5 py-3 rounded text-sm" data-i18n="nav-free-quote">Free Quote</a>
         </div>
         <button id="hamburger" class="lg:hidden p-2 text-brand-blue" aria-label="Open menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -259,13 +289,13 @@
       </div>
       <div id="mobile-menu" class="lg:hidden pb-4 border-t border-gray-100">
         <div class="flex flex-col gap-1 pt-3">
-          <a href="#" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">Home</a>
-          <a href="#services" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">Services</a>
-          <a href="#about" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">About</a>
-          <a href="#testimonials" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">Reviews</a>
-          <a href="#gallery" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">Gallery</a>
-          <a href="#contact" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200">Contact</a>
-          <a href="#quote" class="btn-orange text-center py-3 px-4 rounded text-sm mt-2">Free Quote</a>
+          <a href="#" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-home">Home</a>
+          <a href="#services" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-services">Services</a>
+          <a href="#about" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-about">About</a>
+          <a href="#testimonials" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-reviews">Reviews</a>
+          <a href="#gallery" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-gallery">Gallery</a>
+          <a href="#contact" class="py-2 px-2 text-sm font-semibold text-brand-charcoal uppercase tracking-wide hover:text-brand-orange transition-colors duration-200" data-i18n="nav-contact">Contact</a>
+          <a href="#quote" class="btn-orange text-center py-3 px-4 rounded text-sm mt-2" data-i18n="nav-free-quote">Free Quote</a>
         </div>
       </div>
     </div>
@@ -279,14 +309,14 @@
         <!-- Left: Hero text -->
         <div class="flex-1 text-white">
           <div class="section-accent"></div>
-          <h1 class="font-heading font-black uppercase leading-none text-4xl sm:text-5xl xl:text-6xl" style="letter-spacing:-0.02em; line-height:1.05;">
+          <h1 class="font-heading font-black uppercase leading-none text-4xl sm:text-5xl xl:text-6xl" style="letter-spacing:-0.02em; line-height:1.05;" data-i18n="hero-title">
             Residential<br/>Roof Shingle<br/>Replacement
           </h1>
-          <p class="mt-6 text-gray-300 text-base max-w-md" style="line-height:1.75;">
+          <p class="mt-6 text-gray-300 text-base max-w-md" style="line-height:1.75;" data-i18n="hero-subtitle">
             Professional, fast, and reliable roofing services — serving the West Island and beyond. Licensed &amp; insured with over 20 years of experience.
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-6">
-            <a href="#quote" class="btn-orange px-8 py-4 rounded text-sm">Get a Free Quote</a>
+            <a href="#quote" class="btn-orange px-8 py-4 rounded text-sm" data-i18n="hero-cta">Get a Free Quote</a>
             <a href="tel:+15141234567" class="flex items-center gap-2 text-white hover:text-brand-orange transition-colors duration-200">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
               <span class="font-semibold">(514) 123-4567</span>
@@ -297,19 +327,19 @@
               <div class="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </div>
-              <span class="text-gray-300 text-sm">100% Satisfaction</span>
+              <span class="text-gray-300 text-sm" data-i18n="hero-check-1">100% Satisfaction</span>
             </div>
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </div>
-              <span class="text-gray-300 text-sm">Licensed &amp; Insured</span>
+              <span class="text-gray-300 text-sm" data-i18n="hero-check-2">Licensed &amp; Insured</span>
             </div>
             <div class="flex items-center gap-2">
               <div class="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </div>
-              <span class="text-gray-300 text-sm">20+ Years Experience</span>
+              <span class="text-gray-300 text-sm" data-i18n="hero-check-3">20+ Years Experience</span>
             </div>
           </div>
         </div>
@@ -320,43 +350,43 @@
             <div class="bg-brand-blue px-6 py-5 text-center">
               <div class="inline-flex items-center gap-2 bg-brand-orange text-white text-xs font-heading font-bold uppercase tracking-wider px-3 py-1.5 rounded mb-3">
                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zm0 16a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
-                Limited Offer
+                <span data-i18n="quote-badge">Limited Offer</span>
               </div>
-              <h2 class="font-heading font-black text-white uppercase text-lg leading-tight" style="letter-spacing:-0.01em;">
+              <h2 class="font-heading font-black text-white uppercase text-lg leading-tight" style="letter-spacing:-0.01em;" data-i18n="quote-title">
                 Get Your Free Quote<br/>In Less Than 24H!
               </h2>
             </div>
             <form class="px-6 py-6 space-y-3" onsubmit="return false;">
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Full Name</label>
-                <input type="text" placeholder="John Smith" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-full-name">Full Name</label>
+                <input type="text" data-i18n-placeholder="ph-full-name" placeholder="John Smith" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Phone Number</label>
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-phone">Phone Number</label>
                 <input type="tel" placeholder="(514) 000-0000" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Email Address</label>
-                <input type="email" placeholder="you@email.com" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-email">Email Address</label>
+                <input type="email" data-i18n-placeholder="ph-email" placeholder="you@email.com" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Property Address</label>
-                <input type="text" placeholder="123 Main St, Montreal" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-address">Property Address</label>
+                <input type="text" data-i18n-placeholder="ph-address" placeholder="123 Main St, Montreal" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Service Needed</label>
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-service">Service Needed</label>
                 <select class="form-input bg-white">
-                  <option value="">Select a service</option>
-                  <option>Shingle Replacement</option>
-                  <option>Full Roof Replacement</option>
-                  <option>Roof Repair</option>
-                  <option>Inspection</option>
+                  <option value="" data-i18n="select-placeholder">Select a service</option>
+                  <option data-i18n="select-shingle">Shingle Replacement</option>
+                  <option data-i18n="select-full-roof">Full Roof Replacement</option>
+                  <option data-i18n="select-repair">Roof Repair</option>
+                  <option data-i18n="select-inspection">Inspection</option>
                 </select>
               </div>
-              <button type="submit" class="btn-orange w-full py-4 rounded text-sm mt-1">
+              <button type="submit" class="btn-orange w-full py-4 rounded text-sm mt-1" data-i18n="btn-get-quote">
                 Get My Free Quote &rarr;
               </button>
-              <p class="text-xs text-center text-brand-gray">No commitment &mdash; 100% free estimate</p>
+              <p class="text-xs text-center text-brand-gray" data-i18n="form-no-commitment">No commitment &mdash; 100% free estimate</p>
             </form>
           </div>
         </div>
@@ -370,18 +400,18 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-12">
         <div class="section-accent mx-auto"></div>
-        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;">Customer Testimonials</h2>
+        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;" data-i18n="testimonials-title">Customer Testimonials</h2>
         <div class="flex items-center justify-center gap-2 mt-4">
           <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           <span class="font-heading font-bold text-brand-blue text-lg">4.9</span>
           <div class="flex gap-0.5"><span class="star text-lg">&#9733;</span><span class="star text-lg">&#9733;</span><span class="star text-lg">&#9733;</span><span class="star text-lg">&#9733;</span><span class="star text-lg">&#9733;</span></div>
-          <span class="text-brand-gray text-sm">(127 reviews)</span>
+          <span class="text-brand-gray text-sm" data-i18n="reviews-count">(127 reviews)</span>
         </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"Structura Roofing replaced our entire shingle roof in just two days. Incredibly professional team, clean job site, and the result looks amazing. Highly recommend!"</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-1">"Structura Roofing replaced our entire shingle roof in just two days. Incredibly professional team, clean job site, and the result looks amazing. Highly recommend!"</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/1a2545/ffffff?text=JD" alt="James D." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -392,7 +422,7 @@
         </div>
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"Got my quote within hours of calling. The price was fair, the crew was respectful of our property, and the work was done perfectly. Will use them again without question."</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-2">"Got my quote within hours of calling. The price was fair, the crew was respectful of our property, and the work was done perfectly. Will use them again without question."</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/1a2545/ffffff?text=ML" alt="Marie L." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -403,7 +433,7 @@
         </div>
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"Noticed a leak on a Friday and they were on our roof Monday morning. Fast response, transparent pricing, and excellent quality. Structura Roofing is the real deal."</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-3">"Noticed a leak on a Friday and they were on our roof Monday morning. Fast response, transparent pricing, and excellent quality. Structura Roofing is the real deal."</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/1a2545/ffffff?text=RB" alt="Robert B." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -414,7 +444,7 @@
         </div>
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"From the first phone call to the final inspection, everything was seamless. They cleaned up every nail from our lawn and left the property spotless. 10/10."</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-4">"From the first phone call to the final inspection, everything was seamless. They cleaned up every nail from our lawn and left the property spotless. 10/10."</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/f57a00/ffffff?text=SC" alt="Sandra C." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -425,7 +455,7 @@
         </div>
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"We had three quotes and Structura Roofing came in with the best price AND the best quality materials. The new IKO shingles look fantastic on our home."</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-5">"We had three quotes and Structura Roofing came in with the best price AND the best quality materials. The new IKO shingles look fantastic on our home."</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/f57a00/ffffff?text=PT" alt="Paul T." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -436,7 +466,7 @@
         </div>
         <div class="testimonial-card">
           <div class="flex gap-0.5 mb-3"><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span></div>
-          <p class="text-brand-gray text-sm" style="line-height:1.75;">"My elderly mother's roof was in critical condition. Structura prioritized her job and treated her with so much respect. The team is kind, professional, and skilled."</p>
+          <p class="text-brand-gray text-sm" style="line-height:1.75;" data-i18n="testimonial-6">"My elderly mother's roof was in critical condition. Structura prioritized her job and treated her with so much respect. The team is kind, professional, and skilled."</p>
           <div class="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
             <img src="https://placehold.co/44x44/1a2545/ffffff?text=AN" alt="Anne N." class="w-11 h-11 rounded-full object-cover" />
             <div>
@@ -458,8 +488,8 @@
       <div class="lg:w-1/2 bg-brand-blue text-white flex items-center">
         <div class="px-10 py-16 lg:px-16">
           <div class="section-accent"></div>
-          <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl leading-tight" style="letter-spacing:-0.02em;">Shingle Replacement</h2>
-          <p class="mt-5 text-gray-300 text-base" style="line-height:1.75;">
+          <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl leading-tight" style="letter-spacing:-0.02em;" data-i18n="service-title">Shingle Replacement</h2>
+          <p class="mt-5 text-gray-300 text-base" style="line-height:1.75;" data-i18n="service-desc">
             Our shingle replacement service is built for speed, quality, and lasting protection. We use premium-grade asphalt shingles from top manufacturers — IKO, BP, and CertainTeed — with full labor and material warranties included.
           </p>
           <ul class="mt-6 space-y-3">
@@ -467,28 +497,28 @@
               <span class="mt-0.5 w-5 h-5 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </span>
-              <span class="text-gray-300 text-sm" style="line-height:1.65;">Full removal of existing shingles &amp; underlayment</span>
+              <span class="text-gray-300 text-sm" style="line-height:1.65;" data-i18n="service-li-1">Full removal of existing shingles &amp; underlayment</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="mt-0.5 w-5 h-5 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </span>
-              <span class="text-gray-300 text-sm" style="line-height:1.65;">Deck inspection &amp; repair where needed</span>
+              <span class="text-gray-300 text-sm" style="line-height:1.65;" data-i18n="service-li-2">Deck inspection &amp; repair where needed</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="mt-0.5 w-5 h-5 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </span>
-              <span class="text-gray-300 text-sm" style="line-height:1.65;">Ice &amp; water shield installation</span>
+              <span class="text-gray-300 text-sm" style="line-height:1.65;" data-i18n="service-li-3">Ice &amp; water shield installation</span>
             </li>
             <li class="flex items-start gap-3">
               <span class="mt-0.5 w-5 h-5 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0">
                 <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               </span>
-              <span class="text-gray-300 text-sm" style="line-height:1.65;">10-year workmanship guarantee</span>
+              <span class="text-gray-300 text-sm" style="line-height:1.65;" data-i18n="service-li-4">10-year workmanship guarantee</span>
             </li>
           </ul>
-          <a href="#quote" class="btn-orange inline-block mt-8 px-8 py-4 rounded text-sm">Get a Free Quote</a>
+          <a href="#quote" class="btn-orange inline-block mt-8 px-8 py-4 rounded text-sm" data-i18n="hero-cta">Get a Free Quote</a>
         </div>
       </div>
     </div>
@@ -500,18 +530,18 @@
       <div class="lg:w-1/2 bg-gray-50 flex items-center">
         <div class="px-10 py-16 lg:px-16">
           <div class="section-accent"></div>
-          <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue leading-tight" style="letter-spacing:-0.02em;">
+          <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue leading-tight" style="letter-spacing:-0.02em;" data-i18n="about-title">
             The Best Roofers on the West Island and Beyond!
           </h2>
-          <p class="mt-5 text-brand-gray text-base" style="line-height:1.75;">
+          <p class="mt-5 text-brand-gray text-base" style="line-height:1.75;" data-i18n="about-p1">
             Structura Roofing was founded on a simple belief: every homeowner deserves an honest, expert roofer they can trust. Our crew brings decades of combined experience to every job — from quick repairs to full replacements.
           </p>
-          <p class="mt-4 text-brand-gray text-base" style="line-height:1.75;">
+          <p class="mt-4 text-brand-gray text-base" style="line-height:1.75;" data-i18n="about-p2">
             We take pride in showing up on time, communicating clearly, and leaving your property cleaner than we found it. That's the Structura standard.
           </p>
           <div class="mt-8 flex flex-wrap gap-4">
-            <a href="#quote" class="btn-orange px-8 py-4 rounded text-sm">Get a Free Quote</a>
-            <a href="tel:+15141234567" class="btn-blue px-8 py-4 rounded text-sm">Call Us Now</a>
+            <a href="#quote" class="btn-orange px-8 py-4 rounded text-sm" data-i18n="hero-cta">Get a Free Quote</a>
+            <a href="tel:+15141234567" class="btn-blue px-8 py-4 rounded text-sm" data-i18n="about-cta-call">Call Us Now</a>
           </div>
         </div>
       </div>
@@ -526,25 +556,25 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-14">
         <div class="section-accent mx-auto"></div>
-        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;">Why Work with Structura Roofing?</h2>
-        <p class="mt-4 text-brand-gray max-w-xl mx-auto text-base" style="line-height:1.75;">We back every job with our quality guarantee. Here's what sets us apart.</p>
+        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;" data-i18n="why-title">Why Work with Structura Roofing?</h2>
+        <p class="mt-4 text-brand-gray max-w-xl mx-auto text-base" style="line-height:1.75;" data-i18n="why-subtitle">We back every job with our quality guarantee. Here's what sets us apart.</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 border border-gray-100 rounded-lg overflow-hidden mb-14" style="box-shadow:0 8px 24px rgba(26,37,69,0.18),0 2px 6px rgba(26,37,69,0.10);">
         <div class="stat-card">
           <div class="font-heading font-black text-5xl text-brand-orange" style="letter-spacing:-0.03em;">20+</div>
-          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2">Years of Experience</div>
-          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;">Two decades serving Montreal homeowners with reliable roofing solutions.</p>
+          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2" data-i18n="stat-years-label">Years of Experience</div>
+          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;" data-i18n="stat-years-desc">Two decades serving Montreal homeowners with reliable roofing solutions.</p>
         </div>
         <div class="stat-card">
           <div class="font-heading font-black text-5xl text-brand-orange" style="letter-spacing:-0.03em;">500+</div>
-          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2">Roofs Completed</div>
-          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;">Every project completed to code, on time, and within budget.</p>
+          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2" data-i18n="stat-roofs-label">Roofs Completed</div>
+          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;" data-i18n="stat-roofs-desc">Every project completed to code, on time, and within budget.</p>
         </div>
         <div class="stat-card">
           <div class="font-heading font-black text-5xl text-brand-orange" style="letter-spacing:-0.03em;">24H</div>
-          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2">Quote Turnaround</div>
-          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;">Fast, transparent quotes — no waiting, no pressure, no hidden fees.</p>
+          <div class="font-heading font-bold uppercase text-brand-blue text-sm tracking-wide mt-2" data-i18n="stat-quote-label">Quote Turnaround</div>
+          <p class="text-brand-gray text-xs mt-2" style="line-height:1.65;" data-i18n="stat-quote-desc">Fast, transparent quotes — no waiting, no pressure, no hidden fees.</p>
         </div>
       </div>
 
@@ -552,34 +582,54 @@
   </section>
 
   <!-- GALLERY -->
-  <section id="gallery" class="py-20 bg-gray-50">
+  <style>
+    @keyframes gallery-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .gallery-infinite-track {
+      animation: gallery-scroll 28s linear infinite;
+    }
+    .gallery-infinite-track:hover {
+      animation-play-state: paused;
+    }
+    .gallery-scroll-mask {
+      -webkit-mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .gallery-slide-img {
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), filter 0.35s ease;
+    }
+    .gallery-slide-img:hover {
+      transform: scale(1.06);
+      filter: brightness(1.08);
+    }
+  </style>
+
+  <section id="gallery" class="py-20 bg-gray-50 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-12">
         <div class="section-accent mx-auto"></div>
-        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;">Our Recent Projects</h2>
-        <p class="mt-4 text-brand-gray text-base">Every roof we complete &mdash; we're proud to show it.</p>
+        <h2 class="font-heading font-black uppercase text-3xl sm:text-4xl text-brand-blue tracking-tight" style="letter-spacing:-0.02em;" data-i18n="gallery-title">Our Recent Projects</h2>
+        <p class="mt-4 text-brand-gray text-base" data-i18n="gallery-subtitle">Every roof we complete &mdash; we're proud to show it.</p>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div class="gallery-item rounded-lg h-52 md:h-64">
-          <img src="brand_assets/project-1.jpg" alt="Roofing project 1" />
-          <div class="gallery-overlay"></div>
-        </div>
-        <div class="gallery-item rounded-lg h-52 md:h-64">
-          <img src="brand_assets/project-2.jpg" alt="Roofing project 2" />
-          <div class="gallery-overlay"></div>
-        </div>
-        <div class="gallery-item rounded-lg h-52 md:h-64">
-          <img src="brand_assets/project-3.jpg" alt="Roofing project 3" />
-          <div class="gallery-overlay"></div>
-        </div>
-        <div class="gallery-item rounded-lg h-52 md:h-64">
-          <img src="brand_assets/project-5.jpg" alt="Roofing project 5" />
-          <div class="gallery-overlay"></div>
-        </div>
-        <div class="gallery-item rounded-lg h-52 md:h-64">
-          <img src="brand_assets/project-4.jpg" alt="Roofing project 6" />
-          <div class="gallery-overlay"></div>
-        </div>
+    </div>
+
+    <!-- Infinite scroll strip (full-bleed) -->
+    <div class="gallery-scroll-mask w-full overflow-hidden">
+      <div class="gallery-infinite-track flex gap-5 w-max">
+        <!-- Original set -->
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-1.jpg" alt="Roofing project 1" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-2.jpg" alt="Roofing project 2" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-3.jpg" alt="Roofing project 3" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-4.jpg" alt="Roofing project 4" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-5.jpg" alt="Roofing project 5" /></div>
+        <!-- Duplicate set for seamless loop -->
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-1.jpg" alt="Roofing project 1" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-2.jpg" alt="Roofing project 2" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-3.jpg" alt="Roofing project 3" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-4.jpg" alt="Roofing project 4" /></div>
+        <div class="flex-shrink-0 w-64 h-52 md:w-80 md:h-64 rounded-2xl overflow-hidden shadow-lg"><img class="gallery-slide-img w-full h-full object-cover" src="brand_assets/project-5.jpg" alt="Roofing project 5" /></div>
       </div>
     </div>
   </section>
@@ -594,10 +644,10 @@
       <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
         <div class="flex-1 text-white text-center lg:text-left">
           <div class="section-accent lg:mx-0 mx-auto"></div>
-          <h2 class="font-heading font-black uppercase text-4xl sm:text-5xl xl:text-6xl leading-none" style="letter-spacing:-0.02em;">
+          <h2 class="font-heading font-black uppercase text-4xl sm:text-5xl xl:text-6xl leading-none" style="letter-spacing:-0.02em;" data-i18n="cta-title">
             Free Quote<br/>In Less Than<br/><span class="text-brand-orange">24 Hours!</span>
           </h2>
-          <p class="mt-6 text-gray-300 text-base max-w-md mx-auto lg:mx-0" style="line-height:1.75;">
+          <p class="mt-6 text-gray-300 text-base max-w-md mx-auto lg:mx-0" style="line-height:1.75;" data-i18n="cta-desc">
             Don't wait for a small leak to become a big problem. Contact Structura Roofing today &mdash; we'll assess your roof and get you a transparent, no-obligation estimate within 24 hours.
           </p>
           <div class="mt-8 flex flex-wrap justify-center lg:justify-start gap-6">
@@ -606,7 +656,7 @@
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
               </div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider">Call us</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="cta-call-label">Call us</div>
                 <a href="tel:+15141234567" class="text-white font-semibold hover:text-brand-orange transition-colors duration-200">(514) 123-4567</a>
               </div>
             </div>
@@ -615,7 +665,7 @@
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
               </div>
               <div>
-                <div class="text-xs text-gray-400 uppercase tracking-wider">Email us</div>
+                <div class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="cta-email-label">Email us</div>
                 <a href="mailto:info@structuraroofing.com" class="text-white font-semibold hover:text-brand-orange transition-colors duration-200">info@structuraroofing.com</a>
               </div>
             </div>
@@ -624,26 +674,26 @@
         <div class="w-full lg:w-96 flex-shrink-0">
           <div class="bg-white rounded-lg overflow-hidden card-shadow">
             <div class="bg-brand-orange px-6 py-4 text-center">
-              <h3 class="font-heading font-black text-white uppercase text-base" style="letter-spacing:0.02em;">Request Your Free Estimate</h3>
+              <h3 class="font-heading font-black text-white uppercase text-base" style="letter-spacing:0.02em;" data-i18n="cta-form-title">Request Your Free Estimate</h3>
             </div>
             <form class="px-6 py-6 space-y-3" onsubmit="return false;">
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Full Name</label>
-                <input type="text" placeholder="John Smith" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-full-name">Full Name</label>
+                <input type="text" data-i18n-placeholder="ph-full-name" placeholder="John Smith" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Phone Number</label>
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-phone">Phone Number</label>
                 <input type="tel" placeholder="(514) 000-0000" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Email Address</label>
-                <input type="email" placeholder="you@email.com" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-email">Email Address</label>
+                <input type="email" data-i18n-placeholder="ph-email" placeholder="you@email.com" class="form-input" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1">Property Address</label>
-                <input type="text" placeholder="123 Main St, Montreal" class="form-input" />
+                <label class="block text-xs font-semibold text-brand-charcoal uppercase tracking-wide mb-1" data-i18n="label-address">Property Address</label>
+                <input type="text" data-i18n-placeholder="ph-address" placeholder="123 Main St, Montreal" class="form-input" />
               </div>
-              <button type="submit" class="btn-orange w-full py-4 rounded text-sm">
+              <button type="submit" class="btn-orange w-full py-4 rounded text-sm" data-i18n="btn-send-request">
                 Send My Request &rarr;
               </button>
             </form>
@@ -659,7 +709,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
           <img src="brand_assets/Logo.png" alt="Structura Roofing" class="h-10 w-auto brightness-0 invert mb-4" />
-          <p class="text-gray-400 text-sm" style="line-height:1.75;">Residential and commercial roofing specialists serving the West Island and greater Montreal area.</p>
+          <p class="text-gray-400 text-sm" style="line-height:1.75;" data-i18n="footer-desc">Residential and commercial roofing specialists serving the West Island and greater Montreal area.</p>
           <div class="flex gap-3 mt-5">
             <a href="#" class="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-colors duration-200" aria-label="Facebook">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
@@ -670,27 +720,27 @@
           </div>
         </div>
         <div>
-          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4">Services</h4>
+          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4" data-i18n="footer-services-title">Services</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Shingle Replacement</a></li>
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Full Roof Replacement</a></li>
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Roof Repair</a></li>
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Roof Inspection</a></li>
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Emergency Services</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-shingle">Shingle Replacement</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-full-roof">Full Roof Replacement</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-repair">Roof Repair</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-inspection">Roof Inspection</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-emergency">Emergency Services</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4">Quick Links</h4>
+          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4" data-i18n="footer-links-title">Quick Links</h4>
           <ul class="space-y-2">
-            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Home</a></li>
-            <li><a href="#about" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">About Us</a></li>
-            <li><a href="#testimonials" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Reviews</a></li>
-            <li><a href="#gallery" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Gallery</a></li>
-            <li><a href="#quote" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200">Free Quote</a></li>
+            <li><a href="#" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="nav-home">Home</a></li>
+            <li><a href="#about" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="footer-about">About Us</a></li>
+            <li><a href="#testimonials" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="nav-reviews">Reviews</a></li>
+            <li><a href="#gallery" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="nav-gallery">Gallery</a></li>
+            <li><a href="#quote" class="text-gray-400 text-sm hover:text-brand-orange transition-colors duration-200" data-i18n="nav-free-quote">Free Quote</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4">Contact</h4>
+          <h4 class="font-heading font-bold uppercase text-sm tracking-widest text-gray-300 mb-4" data-i18n="footer-contact-title">Contact</h4>
           <ul class="space-y-3">
             <li class="flex items-start gap-2.5">
               <svg class="w-4 h-4 text-brand-orange mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
@@ -702,11 +752,11 @@
             </li>
             <li class="flex items-start gap-2.5">
               <svg class="w-4 h-4 text-brand-orange mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span class="text-gray-400 text-sm">West Island, Montreal, QC</span>
+              <span class="text-gray-400 text-sm">West Island, Montréal, QC</span>
             </li>
           </ul>
           <div class="mt-6">
-            <div class="text-xs text-gray-500 uppercase tracking-wider mb-3">Certifications</div>
+            <div class="text-xs text-gray-500 uppercase tracking-wider mb-3" data-i18n="footer-certifications">Certifications</div>
             <div class="flex gap-2 flex-wrap">
               <div class="bg-white/10 rounded px-3 py-2 text-xs font-heading font-bold text-white uppercase tracking-wide">RBQ</div>
               <div class="bg-white/10 rounded px-3 py-2 text-xs font-heading font-bold text-white uppercase tracking-wide">CNESST</div>
@@ -718,16 +768,218 @@
     </div>
     <div class="border-t border-white/10">
       <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p class="text-gray-500 text-xs">&copy; 2026 Structura Roofing. All rights reserved. RBQ #0000-0000-00</p>
+        <p class="text-gray-500 text-xs" data-i18n="footer-copyright">&copy; 2026 Structura Roofing. All rights reserved. RBQ #0000-0000-00</p>
         <div class="flex gap-4">
-          <a href="#" class="text-gray-500 text-xs hover:text-brand-orange transition-colors duration-200">Privacy Policy</a>
-          <a href="#" class="text-gray-500 text-xs hover:text-brand-orange transition-colors duration-200">Terms of Service</a>
+          <a href="#" class="text-gray-500 text-xs hover:text-brand-orange transition-colors duration-200" data-i18n="footer-privacy">Privacy Policy</a>
+          <a href="#" class="text-gray-500 text-xs hover:text-brand-orange transition-colors duration-200" data-i18n="footer-terms">Terms of Service</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
+    // ── Translations ──────────────────────────────────────────────────────────
+    const translations = {
+      en: {
+        'licensed-insured': 'Licensed &amp; Insured',
+        'nav-home': 'Home',
+        'nav-services': 'Services',
+        'nav-about': 'About',
+        'nav-reviews': 'Reviews',
+        'nav-gallery': 'Gallery',
+        'nav-contact': 'Contact',
+        'nav-free-quote': 'Free Quote',
+        'call-us-now': 'Call us now',
+        'hero-title': 'Residential<br/>Roof Shingle<br/>Replacement',
+        'hero-subtitle': 'Professional, fast, and reliable roofing services — serving the West Island and beyond. Licensed &amp; insured with over 20 years of experience.',
+        'hero-cta': 'Get a Free Quote',
+        'hero-check-1': '100% Satisfaction',
+        'hero-check-2': 'Licensed &amp; Insured',
+        'hero-check-3': '20+ Years Experience',
+        'quote-badge': 'Limited Offer',
+        'quote-title': 'Get Your Free Quote<br/>In Less Than 24H!',
+        'label-full-name': 'Full Name',
+        'label-phone': 'Phone Number',
+        'label-email': 'Email Address',
+        'label-address': 'Property Address',
+        'label-service': 'Service Needed',
+        'ph-full-name': 'John Smith',
+        'ph-email': 'you@email.com',
+        'ph-address': '123 Main St, Montreal',
+        'select-placeholder': 'Select a service',
+        'select-shingle': 'Shingle Replacement',
+        'select-full-roof': 'Full Roof Replacement',
+        'select-repair': 'Roof Repair',
+        'select-inspection': 'Inspection',
+        'btn-get-quote': 'Get My Free Quote &rarr;',
+        'form-no-commitment': 'No commitment &mdash; 100% free estimate',
+        'testimonials-title': 'Customer Testimonials',
+        'reviews-count': '(127 reviews)',
+        'testimonial-1': '"Structura Roofing replaced our entire shingle roof in just two days. Incredibly professional team, clean job site, and the result looks amazing. Highly recommend!"',
+        'testimonial-2': '"Got my quote within hours of calling. The price was fair, the crew was respectful of our property, and the work was done perfectly. Will use them again without question."',
+        'testimonial-3': '"Noticed a leak on a Friday and they were on our roof Monday morning. Fast response, transparent pricing, and excellent quality. Structura Roofing is the real deal."',
+        'testimonial-4': '"From the first phone call to the final inspection, everything was seamless. They cleaned up every nail from our lawn and left the property spotless. 10/10."',
+        'testimonial-5': '"We had three quotes and Structura Roofing came in with the best price AND the best quality materials. The new IKO shingles look fantastic on our home."',
+        'testimonial-6': '"My elderly mother\'s roof was in critical condition. Structura prioritized her job and treated her with so much respect. The team is kind, professional, and skilled."',
+        'service-title': 'Shingle Replacement',
+        'service-desc': 'Our shingle replacement service is built for speed, quality, and lasting protection. We use premium-grade asphalt shingles from top manufacturers — IKO, BP, and CertainTeed — with full labor and material warranties included.',
+        'service-li-1': 'Full removal of existing shingles &amp; underlayment',
+        'service-li-2': 'Deck inspection &amp; repair where needed',
+        'service-li-3': 'Ice &amp; water shield installation',
+        'service-li-4': '10-year workmanship guarantee',
+        'about-title': 'The Best Roofers on the West Island and Beyond!',
+        'about-p1': 'Structura Roofing was founded on a simple belief: every homeowner deserves an honest, expert roofer they can trust. Our crew brings decades of combined experience to every job — from quick repairs to full replacements.',
+        'about-p2': "We take pride in showing up on time, communicating clearly, and leaving your property cleaner than we found it. That's the Structura standard.",
+        'about-cta-call': 'Call Us Now',
+        'why-title': 'Why Work with Structura Roofing?',
+        'why-subtitle': "We back every job with our quality guarantee. Here's what sets us apart.",
+        'stat-years-label': 'Years of Experience',
+        'stat-years-desc': 'Two decades serving Montreal homeowners with reliable roofing solutions.',
+        'stat-roofs-label': 'Roofs Completed',
+        'stat-roofs-desc': 'Every project completed to code, on time, and within budget.',
+        'stat-quote-label': 'Quote Turnaround',
+        'stat-quote-desc': 'Fast, transparent quotes — no waiting, no pressure, no hidden fees.',
+        'gallery-title': 'Our Recent Projects',
+        'gallery-subtitle': 'Every roof we complete &mdash; we\'re proud to show it.',
+        'cta-title': 'Free Quote<br/>In Less Than<br/><span class="text-brand-orange">24 Hours!</span>',
+        'cta-desc': "Don't wait for a small leak to become a big problem. Contact Structura Roofing today &mdash; we'll assess your roof and get you a transparent, no-obligation estimate within 24 hours.",
+        'cta-call-label': 'Call us',
+        'cta-email-label': 'Email us',
+        'cta-form-title': 'Request Your Free Estimate',
+        'btn-send-request': 'Send My Request &rarr;',
+        'footer-desc': 'Residential and commercial roofing specialists serving the West Island and greater Montreal area.',
+        'footer-services-title': 'Services',
+        'footer-shingle': 'Shingle Replacement',
+        'footer-full-roof': 'Full Roof Replacement',
+        'footer-repair': 'Roof Repair',
+        'footer-inspection': 'Roof Inspection',
+        'footer-emergency': 'Emergency Services',
+        'footer-links-title': 'Quick Links',
+        'footer-about': 'About Us',
+        'footer-contact-title': 'Contact',
+        'footer-certifications': 'Certifications',
+        'footer-copyright': '&copy; 2026 Structura Roofing. All rights reserved. RBQ #0000-0000-00',
+        'footer-privacy': 'Privacy Policy',
+        'footer-terms': 'Terms of Service',
+      },
+      fr: {
+        'licensed-insured': 'Licencié et assuré',
+        'nav-home': 'Accueil',
+        'nav-services': 'Services',
+        'nav-about': 'À propos',
+        'nav-reviews': 'Avis',
+        'nav-gallery': 'Galerie',
+        'nav-contact': 'Contact',
+        'nav-free-quote': 'Soumission gratuite',
+        'call-us-now': 'Appelez-nous',
+        'hero-title': 'Remplacement<br/>de Bardeaux<br/>Résidentiel',
+        'hero-subtitle': 'Services de toiture professionnels, rapides et fiables — desservant l\'Ouest-de-l\'Île et au-delà. Licencié et assuré avec plus de 20 ans d\'expérience.',
+        'hero-cta': 'Obtenir une soumission',
+        'hero-check-1': '100% satisfaction',
+        'hero-check-2': 'Licencié et assuré',
+        'hero-check-3': '20+ ans d\'expérience',
+        'quote-badge': 'Offre limitée',
+        'quote-title': 'Obtenez votre soumission<br/>en moins de 24H !',
+        'label-full-name': 'Nom complet',
+        'label-phone': 'Numéro de téléphone',
+        'label-email': 'Adresse courriel',
+        'label-address': 'Adresse de la propriété',
+        'label-service': 'Service requis',
+        'ph-full-name': 'Jean Dupont',
+        'ph-email': 'vous@courriel.com',
+        'ph-address': '123 rue Principale, Montréal',
+        'select-placeholder': 'Sélectionnez un service',
+        'select-shingle': 'Remplacement de bardeaux',
+        'select-full-roof': 'Remplacement complet de toiture',
+        'select-repair': 'Réparation de toiture',
+        'select-inspection': 'Inspection',
+        'btn-get-quote': 'Obtenir ma soumission &rarr;',
+        'form-no-commitment': 'Aucun engagement &mdash; estimation 100% gratuite',
+        'testimonials-title': 'Témoignages de clients',
+        'reviews-count': '(127 avis)',
+        'testimonial-1': '« Structura Roofing a remplacé l\'ensemble de notre toiture en bardeaux en seulement deux jours. Une équipe incroyablement professionnelle, un chantier propre et le résultat est magnifique. Je recommande vivement ! »',
+        'testimonial-2': '« J\'ai reçu ma soumission en quelques heures après avoir appelé. Le prix était juste, l\'équipe a respecté notre propriété et le travail a été parfaitement réalisé. Je ferai de nouveau appel à eux sans hésitation. »',
+        'testimonial-3': '« J\'ai remarqué une fuite un vendredi et ils étaient sur notre toit le lundi matin. Réponse rapide, prix transparents et excellente qualité. Structura Roofing, c\'est du sérieux. »',
+        'testimonial-4': '« Du premier appel téléphonique jusqu\'à l\'inspection finale, tout s\'est déroulé sans accroc. Ils ont ramassé chaque clou dans notre pelouse et laissé la propriété impeccable. 10/10. »',
+        'testimonial-5': '« Nous avons eu trois soumissions et Structura Roofing offrait le meilleur prix ET les meilleurs matériaux. Les nouveaux bardeaux IKO ont fière allure sur notre maison. »',
+        'testimonial-6': '« Le toit de ma mère âgée était en état critique. Structura a priorisé son travail et l\'a traitée avec beaucoup de respect. L\'équipe est attentionnée, professionnelle et compétente. »',
+        'service-title': 'Remplacement de bardeaux',
+        'service-desc': 'Notre service de remplacement de bardeaux est conçu pour la rapidité, la qualité et une protection durable. Nous utilisons des bardeaux d\'asphalte de qualité supérieure des meilleurs fabricants — IKO, BP et CertainTeed — avec garanties complètes sur la main-d\'œuvre et les matériaux.',
+        'service-li-1': 'Enlèvement complet des bardeaux et sous-couche existants',
+        'service-li-2': 'Inspection et réparation du pontage au besoin',
+        'service-li-3': 'Installation de membrane pare-glace et pare-eau',
+        'service-li-4': 'Garantie de main-d\'œuvre de 10 ans',
+        'about-title': 'Les meilleurs couvreurs de l\'Ouest-de-l\'Île et au-delà !',
+        'about-p1': 'Structura Roofing a été fondée sur une conviction simple : chaque propriétaire mérite un couvreur honnête et expert en qui il peut avoir confiance. Notre équipe apporte des décennies d\'expérience combinée à chaque chantier — des réparations rapides aux remplacements complets.',
+        'about-p2': 'Nous mettons un point d\'honneur à arriver à l\'heure, à communiquer clairement et à laisser votre propriété plus propre qu\'à notre arrivée. C\'est la norme Structura.',
+        'about-cta-call': 'Appelez-nous',
+        'why-title': 'Pourquoi choisir Structura Roofing ?',
+        'why-subtitle': 'Nous garantissons chaque travail avec notre assurance qualité. Voici ce qui nous distingue.',
+        'stat-years-label': 'Ans d\'expérience',
+        'stat-years-desc': 'Deux décennies au service des propriétaires montréalais avec des solutions de toiture fiables.',
+        'stat-roofs-label': 'Toitures complétées',
+        'stat-roofs-desc': 'Chaque projet réalisé selon les normes, dans les délais et le budget prévus.',
+        'stat-quote-label': 'Délai de soumission',
+        'stat-quote-desc': 'Soumissions rapides et transparentes — sans attente, sans pression, sans frais cachés.',
+        'gallery-title': 'Nos projets récents',
+        'gallery-subtitle': 'Chaque toiture que nous complétons &mdash; nous sommes fiers de la montrer.',
+        'cta-title': 'Soumission gratuite<br/>en moins de<br/><span class="text-brand-orange">24 heures !</span>',
+        'cta-desc': 'N\'attendez pas qu\'une petite fuite devienne un grand problème. Contactez Structura Roofing aujourd\'hui &mdash; nous évaluerons votre toiture et vous fournirons une estimation transparente et sans engagement dans les 24 heures.',
+        'cta-call-label': 'Appelez-nous',
+        'cta-email-label': 'Écrivez-nous',
+        'cta-form-title': 'Demandez votre estimation gratuite',
+        'btn-send-request': 'Envoyer ma demande &rarr;',
+        'footer-desc': 'Spécialistes en toiture résidentielle et commerciale desservant l\'Ouest-de-l\'Île et le grand Montréal.',
+        'footer-services-title': 'Services',
+        'footer-shingle': 'Remplacement de bardeaux',
+        'footer-full-roof': 'Remplacement complet de toiture',
+        'footer-repair': 'Réparation de toiture',
+        'footer-inspection': 'Inspection de toiture',
+        'footer-emergency': 'Services d\'urgence',
+        'footer-links-title': 'Liens rapides',
+        'footer-about': 'À propos',
+        'footer-contact-title': 'Contact',
+        'footer-certifications': 'Certifications',
+        'footer-copyright': '&copy; 2026 Structura Roofing. Tous droits réservés. RBQ #0000-0000-00',
+        'footer-privacy': 'Politique de confidentialité',
+        'footer-terms': 'Conditions d\'utilisation',
+      }
+    };
+
+    let currentLang = 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+
+      // Update text/innerHTML elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      // Update <html lang>
+      document.getElementById('html-root').lang = lang;
+
+      // Update button active states
+      const enBtn = document.getElementById('lang-en-btn');
+      const frBtn = document.getElementById('lang-fr-btn');
+      if (lang === 'en') {
+        enBtn.classList.add('active');
+        frBtn.classList.remove('active');
+      } else {
+        frBtn.classList.add('active');
+        enBtn.classList.remove('active');
+      }
+    }
+
+    // ── Nav & scroll ──────────────────────────────────────────────────────────
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
     hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
